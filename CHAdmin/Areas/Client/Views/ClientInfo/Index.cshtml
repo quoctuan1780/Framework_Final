@@ -1,0 +1,144 @@
+﻿@model CHAdmin.Models.infoClientModel
+
+@{
+
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Client/Views/Shared/_LayoutMaster.cshtml";
+    CHAdmin.Models.infoClientModel info = ViewData["info"] as CHAdmin.Models.infoClientModel;
+    List<CHAdmin.Areas.Client.Dao.ClientInfoDao.ItemUnit> li = new CHAdmin.Areas.Client.Dao.ClientInfoDao().getCtdhKhachHang(info.idKH);
+}
+<div id="page-wrapper">
+    <div class="container-fluid">
+        <div class="row col-lg-12">
+            <div class="col-lg-12">
+                <h1 class="page-header">Thông tin tài khoản</h1>
+            </div>
+            <div class="pull-left" style="border: 1px; ">
+                <div class="col-12" style="display: inline-flex;">
+                    <div class="padding-10">
+                        <br>
+                        <div class="pull-left">
+                            <div class="row" style="padding-left: 48px;">
+                                <div style="align-content: center; box-shadow: 0px 0px 3px 0px rgba(88, 88, 88, 0.3); padding: 5px 10px; text-shadow: darkgrey">
+                                    @*<img src="~/Assets/Client/image/customer/" class="img-circle" alt="Cinque Terre" width="200px" height="220px">
+                        <div style="text-align: center; padding-right: 10px">Ảnh đại diện</div><br>*@
+                                    <h3>Thông tin</h3>
+                                    <label>Tên tài khoản: @info.tenTk</label>
+                                    <br>
+                                    <label>Email: @info.email</label>
+                                    <br>
+                                    <label>Họ tên: @info.hoten</label>
+                                    <br>
+                                    <label>Giới tính: @info.gioitinh</label>
+                                    <br>
+                                    <label>Địa chỉ: @info.diachi</label>
+                                    <br>
+                                    <label>Điện thoại: @info.sodt</label>
+                                    <br>
+                                    <div class="col-lg-12" style="display: inline-flex">
+                                        <div class="col-lg-0">
+                                            <a href="/Client/ChangePassWord/Index" style="color: #4169E1">Đổi mật khẩu</a>
+                                        </div>
+                                        <div class="col-lg-0" style="padding: 0px 0px 0px 10px">
+                                            <a href="/Client/Login/Logout" style="color: #4169E1">Đăng xuất</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <br>
+                    </div>
+
+                    <div class="padding-10" style="padding-left: 40pt">
+                        <br>
+                        <div class="pull-right">
+                            <div class="row" style="padding-left: 48px;">
+                                <div style="align-content: center; box-shadow: 0px 0px 3px 0px rgba(88, 88, 88, 0.3); padding: 5px 10px; text-shadow: darkgrey">
+                                    <div class="list-group">
+                                        <h3>Lịch sử đặt hàng</h3>
+                                        @foreach (var sp in li)
+                                        {
+                                            <a href="/Client/Detail/Index/@sp.masp" class="list-group-item list-group-item-action flex-column align-items-start">
+                                                <div style="display:inline-block">
+                                                    <div style="display:inline-block">
+                                                        <img src="~/Assets/Client/image/product/@sp.hinhsp" alt="" height="100pt">
+                                                    </div>
+                                                    <div class="form-block">
+                                                        <h5 class="mb-1">@sp.tensp</h5>
+                                                        <br />
+                                                        <small class="">ngày đặt:@sp.ngaydat</small>
+                                                    </div>
+                                                    <p class="mb-1">Thành tiền: @sp.gia X @sp.soluong = @sp.tonggia</p>
+                                                    <small class="text-muted">MÃ ĐƠN: @sp.madh</small>
+                                                </div>
+                                            </a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+            <!-- /.row -->
+            <div class="pull-right">
+                <div class="col-12" >
+                    <div style="padding-left: 20px; box-shadow: 0px 0px 3px 0px rgba(88, 88, 88, 0.3); margin: 20px 100px;">
+
+                        @using (Html.BeginForm())
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-horizontal">
+                                <h4>Cập nhật thông tin</h4>
+                                <hr />
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                <div class="form-block">
+                                        <label for="email">Email</label>
+                                        @Html.TextBoxFor(model => model.email, new { @class = "form-control", Value = info.email, @readonly = "" })
+                                        @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-block">
+                                    <label for="adress">Họ tên</label>
+                                    @Html.TextBoxFor(model => model.hoten, new { @class = "form-control", Value = info.hoten, @readonly = "" })
+                                    @Html.ValidationMessageFor(model => model.hoten, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-block">
+                                    <label for="adress">Địa chỉ</label>
+                                    @Html.TextBoxFor(model => model.diachi, new { @class = "form-control", Value = info.diachi })
+                                    @Html.ValidationMessageFor(model => model.diachi, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-block">
+                                    <label for="phone">Số điện thoại</label>
+                                    @Html.TextBoxFor(model => model.sodt, new { @class = "form-control", Value = info.sodt })
+                                    @Html.ValidationMessageFor(model => model.sodt, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-block">
+                                    <label for="adress">Giới tính</label>
+                                    @Html.TextBoxFor(model => model.gioitinh, new { @class = "form-control", Value = info.gioitinh, @readonly = "" })
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-block">
+                                    <label for="email">Tên tài khoản</label>
+                                    @Html.EditorFor(model => model.tenTk, new { htmlAttributes = new { @class = "form-control", Value = info.tenTk } })
+                                    @Html.ValidationMessageFor(model => model.tenTk, "", new { @class = "text-danger" })
+                                </div>
+
+                                <div class="form-block">
+                                    <input type="submit" value="Thay đổi" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+        <!-- /.container-fluid -->
+    </div>
+</div>

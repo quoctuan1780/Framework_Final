@@ -1,0 +1,148 @@
+﻿@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Areas/Client/Views/Shared/_LayoutMaster.cshtml";
+    //List<Model.EF.sanpham> km = CHAdmin.Areas.Client.Dao.HomeDao.getSPKM();
+    //List<Model.EF.sanpham> moi = CHAdmin.Areas.Client.Dao.HomeDao.getSPMoi();
+    List<Model.EF.slide> slides = CHAdmin.Areas.Client.Dao.HomeDao.getSlide();
+    //PagedList.IPagedList<Model.EF.sanpham> spkmp = ViewData["spkmp"] as PagedList.IPagedList<Model.EF.sanpham>;
+    //PagedList.IPagedList<Model.EF.sanpham> spmoip = ViewData["spmoip"] as PagedList.IPagedList<Model.EF.sanpham>;
+}
+
+<div class="fullwidthbanner-container">
+    <div class="fullwidthbanner">
+        <div class="bannercontainer">
+            <div class="banner" style="height: 768px;">
+                <ul>
+                    @foreach (var slide in slides)
+                    {
+
+                        <li data-transition="boxfade" data-slotamount="20" class="active-revslide" style="width: 100%; height: 100%; overflow: hidden; z-index: 18; visibility: hidden; opacity: 0;">
+                            <div class="slotholder" style="width:100%;height:100%;" data-duration="undefined" data-zoomstart="undefined" data-zoomend="undefined" data-rotationstart="undefined" data-rotationend="undefined" data-ease="undefined" data-bgpositionend="undefined
+                        d" data-bgfitend="undefined" data-owidth="undefined" data-oheight="undefined">
+                                <div class="tp-bgimg defaultimg" data-lazyload="undefined" data-bgfit="cover" data-bgposition="center center" data-bgrepeat="no-repeat" data-lazydone="undefined" src="~/Assets/Client/image/slide/img/@slide.hinhanh" data-src="~/Assets/Client/image/slide/img/@slide.hinhanh" style="background-color: rgba(0, 0, 0, 0); background-repeat: no-repeat; background-image: url('/Assets/Client/image/slide/img/@slide.hinhanh'); background-size: cover; background-position: center center; width: 100%; height: 100%; opacity: 1; visibility: inherit;">
+                                </div>
+                            </div>
+
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <div class="tp-bannertimer"></div>
+    </div>
+</div>
+<!--slider-->
+
+<div class="container">
+    <div id="content" class="space-top-none">
+        <div class="main-content">
+            <div class="space60">&nbsp;</div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="beta-products-list">
+                        <h4>Sản phẩm mới</h4>
+                        <div class="beta-products-details">
+                            <p class="pull-left">Tìm thấy @ViewBag.webgridData1.Count sản phẩm</p>
+                            <div class="clearfix"></div>
+                        </div>
+
+                        <div class="row">
+                            @foreach (var spmoi in ViewBag.webgridData1)
+                            {
+                                <div class="col-sm-3" style="height: 400px;">
+                                    <div class="single-item">
+                                        @if (spmoi.giakm != 0)
+                                        {
+                                            <div class="ribbon-wrapper">
+                                                <div class="ribbon sale">Sale</div>
+                                            </div>
+                                        }
+
+                                        <div class="single-item-header">
+                                            <a href="#"><img style="box-shadow: 0px 0px 3px 0px rgba(88, 88, 88, 0.3);" src="~/Assets/Client/image/product/@spmoi.hinhanh" alt="" height="250px"></a>
+                                        </div>
+                                        <div class="single-item-body">
+                                            <p class="single-item-title">@spmoi.tensp</p>
+                                            <p class="single-item-price">
+                                                @if (spmoi.giakm == 0)
+                                                {
+                                                    <span class="flash-sale">@spmoi.gia VND</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="flash-del">@spmoi.gia VND</span>
+                                                    <span class="flash-sale">@spmoi.giakm VND</span>
+                                                }
+                                            </p>
+                                        </div>
+                                        <div class="single-item-caption">
+                                            <a class="add-to-cart pull-left" href="javascript:void(0)" onclick="addCart(@spmoi.masp)"><i class="fa fa-shopping-cart"></i></a>
+                                            <a class="beta-btn primary" href="/Client/Detail/Index/@spmoi.masp">Chi tiết<i class="fa fa-chevron-right"></i></a>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @*@Html.PagedListPager(spmoip, page => Url.Action("Index", new { page }))*@
+                        <div class="pagination" >
+                            Page @(ViewBag.webgridData1.PageCount < ViewBag.webgridData1.PageNumber ? 0 : ViewBag.webgridData1.PageNumber)
+                            of @ViewBag.webgridData1.PageCount&nbsp&nbsp @Html.PagedListPager((PagedList.IPagedList)(ViewBag.webgridData1),
+                           page => Url.Action("Index", new { page, type = "spmoi" })
+                           )
+                        </div>
+                    </div> <!-- .beta-products-list -->
+
+                    <div class="space50">&nbsp;</div>
+
+                    <div class="beta-products-list">
+                        <h4>Sản phẩm khuyến mãi</h4>
+                        <div class="beta-products-details">
+                            <p class="pull-left">Tìm thấy @ViewBag.webgridData2.Count sản phẩm</p>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="row">
+                            @foreach (var spkm in ViewBag.webgridData2)
+                            {
+                                <div class="col-sm-3" style="height: 400px">
+                                    <div class="single-item">
+                                        <div class="ribbon-wrapper">
+                                            <div class="ribbon sale">Sale</div>
+                                        </div>
+
+                                        <div class="single-item-header">
+                                            <a href="/Client/Detail/Index/@spkm.masp"><img style="box-shadow: 0px 0px 3px 0px rgba(88, 88, 88, 0.3);" src="~/Assets/Client/image/product/@spkm.hinhanh" alt="" height="250"></a>
+                                        </div>
+                                        <div class="single-item-body">
+                                            <p class="single-item-title">@spkm.tensp</p>
+                                            <p class="single-item-price">
+                                                <span class="flash-del">@spkm.gia VND</span>
+                                                <span class="flash-sale">@spkm.giakm VND</span>
+                                            </p>
+                                        </div>
+                                        <div class="single-item-caption">
+                                            <a class="add-to-cart pull-left" href="javascript:void(0)" onclick="addCart(@spkm.masp)"><i class="fa fa-shopping-cart"></i></a>
+                                            <a class="beta-btn primary" href="/Client/Detail/Index/@spkm.masp">Chi tiết<i class="fa fa-chevron-right"></i></a>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @*@Html.PagedListPager(spkmp, page => Url.Action("Index", new { page }))*@
+                        <div class="pagination" style="margin-left: 400px">
+                            Page @(ViewBag.webgridData2.PageCount < ViewBag.webgridData2.PageNumber ? 0 : ViewBag.webgridData2.PageNumber)
+                            of @ViewBag.webgridData2.PageCount&nbsp&nbsp @Html.PagedListPager((PagedList.IPagedList)(ViewBag.webgridData2),
+                            page => Url.Action("Index", new { page,type= "spkm" }))
+                        </div>
+                    </div> <!-- .beta-products-list -->
+                </div>
+            </div> <!-- end section with sidebar and main content -->
+
+
+        </div> <!-- .main-content -->
+    </div> <!-- #content -->
+</div>

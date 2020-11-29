@@ -1,0 +1,420 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/Client/Views/Shared/_LayoutMaster.cshtml";
+}
+@model CHAdmin.Models.CheckOutInfoModel
+<div class="inner-header">
+    <div class="container">
+        <div class="pull-left">
+            <h6 class="inner-title">Đặt hàng</h6>
+        </div>
+        <div class="pull-right">
+            <div class="beta-breadcrumb">
+                <a href="#">Trang chủ</a> / <span>Đặt hàng</span>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div id="content">
+        @if (Session["idKH"] == null)
+
+        {
+            <h2>@Session["idKH"]</h2>
+            <div class="row">
+                <div class="col-sm-6">
+                    <h6>Đăng nhập để mua hàng hoặc là điền thông tin mua hàng vào form bên dưới</h6>
+                    <div class="form-block">
+                        <a href="/Client/Login/Index" style="font-size: 12pt; color: #0099FF">Đăng nhập ngay</a>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*<form action="{{route('dat-hang')}}" method="post" class="beta-form-checkout">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">*@
+            using (Html.BeginForm(new { @class = "beta-form-checkout", FormMethod.Post }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    @if (ViewBag.Success != null)
+                    {
+                        <div class="alert alert-success"> @ViewBag.Success </div>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Thông tin đặt hàng</h4>
+                        <div class="space20">&nbsp;</div>
+
+                        <div class="form-block">
+                            @*<label style="padding-top: 10px">Email*</label>
+                <input type="email" id="emailAjax" name="emailAjax" required placeholder="expample@gmail.com">*@
+                            @Html.LabelFor(model => model.gmail, new { @class = "control-label col-md-2", style = "padding-top: 10px" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.gmail, new { @class = "form-control", id = "emailAjax", placeholder = "expample@gmail.com", required = "" })
+                                @Html.ValidationMessageFor(model => model.gmail, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div id="datachange">
+                            <div class="form-block">
+                                @*<label for="name">Họ tên*</label>
+                    <input type="text" id="nameAjax" name="hotenAjax" placeholder="Họ tên" required>*@
+                                @Html.LabelFor(model => model.tenKH, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.tenKH, new { @class = "form-control", id = "nameAjax", placeholder = "Họ tên", required = "" })
+                                    @Html.ValidationMessageFor(model => model.tenKH, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-block">
+                                <label>Giới tính </label>
+                                @*<input id="genderAjax" type="radio" class="input-radio" name="gioitinhAjax" value="Nam" checked="checked" style="width: 10%"><span style="margin-right: 10%">Nam</span>
+                    <input id="genderAjax" type="radio" class="input-radio" name="gioitinhAjax" value="Nữ" style="width: 10%"><span>Nữ</span>*@
+                                @Html.LabelFor(model => model.gioitinh, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.RadioButtonFor(model => model.gioitinh, "Nam", new { @class = "input-radio", id = "genderAjax", Value = "Nam", @checked = "checked" })
+                                    <span style="margin-right: 10%">Nam</span>
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "input-radio" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.RadioButtonFor(model => model.gioitinh, "Nữ", new { @class = "input-radio", id = "genderAjax", Value = "Nữ" })
+                                    <span>Nữ</span>
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "input-radio" })
+                                </div>
+                            </div>
+
+                            <div class="form-block">
+                                @*<label for="adress" style="padding-top: 10px">Địa chỉ*</label>
+                    <input type="text" id="addressAjax" name="diachiAjax" placeholder="Street Address" required>*@
+                                @Html.LabelFor(model => model.diaChi, new { @class = "control-label col-md-2", style = "padding-top: 10px" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.diaChi, new { @class = "form-control", id = "addressAjax", placeholder = "Street Address", required = "" })
+                                    @Html.ValidationMessageFor(model => model.diaChi, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-block">
+                                @*<label for="phone">Điện thoại*</label>
+                    <input type="text" id="phoneAjax" name="sodtAjax" required>*@
+                                @Html.LabelFor(model => model.sdt, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.sdt, new { @class = "form-control", id = "phoneAjax", required = "" })
+                                    @Html.ValidationMessageFor(model => model.sdt, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-block">
+                            @*<label for="notes">Ghi chú</label>
+                <textarea id="notesAjax" name="ghichuAjax"></textarea>*@
+                            @Html.LabelFor(model => model.ghichu, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.ghichu, new { @class = "form-control", id = "notesAjax", required = "" })
+                                @Html.ValidationMessageFor(model => model.ghichu, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="your-order">
+                            <div class="your-order-head"><h5>Đơn hàng của bạn</h5></div>
+                            <div class="your-order-body" style="padding: 0px 10px">
+                                <div class="your-order-item">
+                                    <div>
+                                        @if (Session["giohang"] != null)
+                                        {
+                                            foreach (var cart in Session["giohang"] as List<CHAdmin.Models.cartModel>)
+                                            {
+                                                <!--  one item	 -->
+                                                <div class="media">
+                                                    <img width="25%" src="image/product/@cart.Hinh" alt="" class="pull-left">
+                                                    <div class="media-body">
+                                                        <p class="font-large" style="font-weight: bold;">@cart.tenSP</p>
+                                                        <span class="color-gray your-order-info" style="font-weight: bold;">Đơn giá: @cart.donGia đồng</span>
+                                                        <span class="color-gray your-order-info" style="font-weight: bold;">Số lượng: @cart.soLuong</span>
+                                                    </div>
+                                                </div>
+                                                <!-- end one item -->
+                                            }
+                                        }
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="your-order-item">
+                                    <div class="pull-left"><p class="your-order-f18">Tổng tiền:</p></div>
+                                    <div class="pull-right">
+                                        <h5 class="color-black">
+                                            @if (Session["giohang"] != null)
+                                            {<div>@CHAdmin.Models.cartModel.tongTien</div> }
+                                        else
+                                        { <div>0</div>}  VND
+                                        </h5>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="your-order-head"><h5>Hình thức thanh toán</h5></div>
+
+                            <div class="your-order-body">
+                                <ul class="payment_methods methods">
+                                    <li class="payment_method_bacs">
+                                        @*<input id="payment_method_bacs" type="radio" class="input-radio" name="payment_method" value="COD" checked="checked" data-order_button_text="">
+                            <label for="payment_method_bacs">Thanh toán khi nhận hàng </label>*@
+                                        @Html.LabelFor(model => model.httt, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.RadioButtonFor(model => model.httt, "COD", new { @class = "input-radio", id = "payment_method_bacs", Value = "COD" })
+                                            <span style="margin-right: 10%">COD</span>
+                                            @Html.ValidationMessageFor(model => model.httt, "", new { @class = "input-radio" })
+                                        </div>
+                                        <div class="payment_box payment_method_bacs" style="display: block;">
+                                            Cửa hàng sẽ gửi hàng đến địa chỉ của bạn, bạn xem hàng rồi thanh toán tiền cho nhân viên giao hàng
+                                        </div>
+                                    </li>
+
+                                    <li class="payment_method_cheque">
+                                        @*<input id="payment_method_cheque" type="radio" class="input-radio" name="payment_method" value="ATM" data-order_button_text="">
+                            <label for="payment_method_cheque">Chuyển khoản </label>*@
+                                        @Html.LabelFor(model => model.httt, new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.RadioButtonFor(model => model.httt, "ATM", new { @class = "input-radio", id = "payment_method_cheque", Value = "ATM", @checked = "checked" })
+                                            <span style="margin-right: 10%">ATM</span>
+                                            @Html.ValidationMessageFor(model => model.httt, "", new { @class = "input-radio" })
+                                        </div>
+                                        <div class="payment_box payment_method_cheque" style="display: none;">
+                                            Chuyển tiền đến tài khoản sau:
+                                            <br>- Số tài khoản: 123 456 789
+                                            <br>- Chủ TK: Nguyễn A
+                                            <br>- Ngân hàng ACB, Chi nhánh TPHCM
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                            <div class="text-center"><button type="submit" class="beta-btn primary">Đặt hàng <i class="fa fa-chevron-right"></i></button></div>
+                        </div> <!-- .your-order -->
+                    </div>
+                </div>
+                @*</form>*@
+            }
+        }
+        else
+        {
+            int ma = (int)Session["idKH"];
+            Model.EF.khachhang kh = new Model.EF.CoffeeHouseDbContext().khachhangs.FirstOrDefault(x => x.makh == ma);
+            @*<form action = "{{route('dat-hang')}}" method = "post" class="beta-form-checkout">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">*@
+            using (Html.BeginForm("Index", "CheckOut", new { area = "Client" }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="row">
+                    @if (ViewBag.Success != null)
+                    {
+                        <div class="alert alert-success">ViewBag.Success</div>
+                    }
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Thông tin đặt hàng</h4>
+                        <div class="space20">&nbsp;</div>
+
+                        <div class="form-block">
+                            @*<label style="padding-top: 10px"> Email *</label>
+                            <input type="email" id="email" name="email" value="{{$khachhang->email}}" required placeholder="expample@gmail.com">*@
+                            @Html.LabelFor(model => model.gmail, new { @class = "control-label col-md-2", style = "padding-top: 10px" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.gmail, new { @class = "form-control", id = "email", Value = @kh.email, placeholder = "expample@gmail.com", required = "" })
+                                @Html.ValidationMessageFor(model => model.gmail, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-block">
+                            @*<label for="name">Họ tên*</label>
+                            <input type="text" name="hoten" value="{{$khachhang->hoten}}" placeholder="Họ tên" required>*@
+                            @Html.LabelFor(model => model.tenKH, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.tenKH, new { @class = "form-control", id = "hoten", Value = kh.hoten, placeholder = "Họ tên", required = "" })
+                                @Html.ValidationMessageFor(model => model.tenKH, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-block">
+                            @if (kh.gioitinh == "Nam")
+                            {
+                                @*<label> Giới tính </label>*@
+
+                                @*<input id="gender" type="radio" class="input-radio" name="gioitinh" value="Nam" checked="checked" style="width: 10%">
+                                <span style="margin-right: 10%"> Nam </span>
+                                <input id="gender" type="radio" class="input-radio" name="gioitinh" value="Nữ" style="width: 10%">
+                                <span>Nữ</span>*@
+                                @Html.LabelFor(model => model.gioitinh, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.RadioButtonFor(model => model.gioitinh, "Nam", new { @class = "input-radio", id = "gender", Value = "Nam", @checked = "checked" })
+                                    <span style="margin-right: 10%">Nam</span>
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "input-radio" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.RadioButtonFor(model => model.gioitinh, "Nữ", new { @class = "input-radio", id = "gender", Value = "Nữ" })
+                                    <span>Nữ</span>
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "input-radio" })
+                                </div>
+                            }
+                            else
+                            {
+                                @*<label>Giới tính</label>*@
+                                @*<input id="gender" type="radio" class="input-radio" name="gioitinh" value="Nam" style="width: 10%">
+                                <span style="margin-right: 10%"> Nam </span>
+                                <input id="gender" type="radio" class="input-radio" name="gioitinh" value="Nữ" checked="checked" style="width: 10%">
+                                <span>Nữ</span>*@
+                                @Html.LabelFor(model => model.gioitinh, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.RadioButtonFor(model => model.gioitinh, "Nam", new { @class = "input-radio", id = "gender", Value = "Nam" })
+                                    <span style="margin-right: 10%">Nam</span>
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "input-radio" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.RadioButtonFor(model => model.gioitinh, "Nữ", new { @class = "input-radio", id = "gender", Value = "Nữ", @checked = "checked" })
+                                    <span>Nữ</span>
+                                    @Html.ValidationMessageFor(model => model.gioitinh, "", new { @class = "input-radio" })
+                                </div>
+                            }
+                        </div>
+
+                        <div class="form-block">
+                            @*<label for="adress" style="padding-top: 10px">Địa chỉ*</label>
+                            <input type="text" id="address" name="diachi" value="{{$khachhang->diachi}}" placeholder="Street Address" required>*@
+                            @Html.LabelFor(model => model.diaChi, new { @class = "control-label col-md-2", style = "padding-top: 10px" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.diaChi, new { @class = "form-control", id = "address", Value = kh.diachi, placeholder = "Street Address", required = "" })
+                                @Html.ValidationMessageFor(model => model.diaChi, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-block">
+                            @*<label for="phone">Điện thoại*</label>
+                            <input type="text" id="phone" name="sodt" value="{{$khachhang->sodt}}" required>*@
+                            @Html.LabelFor(model => model.sdt, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(model => model.sdt, new { @class = "form-control", id = "phone", Value = kh.sodt, required = "" })
+                                @Html.ValidationMessageFor(model => model.sdt, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-block">
+                            @*<label for="notes">Ghi chú</label>
+                            <input type="textarea" id="notes" name="ghichu">*@
+                            @Html.LabelFor(model => model.ghichu, new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.ghichu, new { @class = "form-control", id = "notes", Value = kh.ghichu, required = "" })
+                                @Html.ValidationMessageFor(model => model.ghichu, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="your-order">
+                        <div class="your-order-head"><h5>Đơn hàng của bạn</h5></div>
+                        <div class="your-order-body" style="padding: 0px 10px">
+                            <div class="your-order-item">
+                                <div>
+                                    @if (Session["giohang"] != null)
+                                    {
+                                        foreach (var cart in Session["giohang"] as List<CHAdmin.Models.cartModel>)
+                                        {
+                                            <!--one item-->
+
+                                            <div class="media">
+                                                <img width="25%" src="image/product/@cart.Hinh" alt="" class="pull-left">
+                                                <div class="media-body">
+                                                    <p class="font-large" style="font-weight: bold;">@cart.tenSP</p>
+                                                    <span class="color-gray your-order-info" style="font-weight: bold;">Đơn giá: @cart.donGia đồng</span>
+                                                    <span class="color-gray your-order-info" style="font-weight: bold;">Số lượng: @cart.soLuong</span>
+                                                </div>
+                                            </div>
+                                            <!-- end one item -->
+                                        }
+                                    }
+                                </div>
+                                <div class="clearfix"></div>
+                                <div>
+                                    <div class="your-order-item">
+                                        <div class="pull-left"><p class="your-order-f18">Tổng tiền:</p></div>
+                                        <div class="pull-right">
+                                            <h5 class="color-black">
+                                                @if (Session["giohang"] != null)
+                                                {<div>@CHAdmin.Models.cartModel.tongTien</div> }
+                                            else
+                                            { <div>0</div>}  VND
+                                            </h5>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                <div class="your-order-head"><h5>Hình thức thanh toán</h5></div>
+
+                                <div class="your-order-body">
+                                    <ul class="payment_methods methods">
+                                        <li class="payment_method_bacs">
+                                            @*<input id="payment_method_bacs" type="radio" class="input-radio" name="payment_method" value="COD" checked="checked" data-order_button_text="">
+                                            <label for="payment_method_bacs">Thanh toán khi nhận hàng</label>*@
+                                            @Html.LabelFor(model => model.httt, new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.RadioButtonFor(model => model.httt, "COD", new { @class = "input-radio", id = "payment_method_bacs", Value = "COD", @checked = "checked" })
+                                                <span style="margin-right: 10%">COD</span>
+                                                @Html.ValidationMessageFor(model => model.httt, "", new { @class = "input-radio" })
+                                            </div>
+                                            <div class="payment_box payment_method_bacs" style="display: block;">
+                                                Cửa hàng sẽ gửi hàng đến địa chỉ của bạn, bạn xem hàng rồi thanh toán tiền cho nhân viên giao hàng
+                                            </div>
+                                        </li>
+
+                                        <li class="payment_method_cheque">
+                                            @*<input id="payment_method_cheque" type="radio" class="input-radio" name="payment_method" value="ATM" data-order_button_text="">
+                                            <label for="payment_method_cheque">Chuyển khoản</label>*@
+                                            @Html.LabelFor(model => model.httt, new { @class = "control-label col-md-2" })
+                                            <div class="col-md-10">
+                                                @Html.RadioButtonFor(model => model.httt, "ATM", new { @class = "input-radio", id = "payment_method_cheque", Value = "ATM" })
+                                                <span style="margin-right: 10%">ATM</span>
+                                                @Html.ValidationMessageFor(model => model.httt, "", new { @class = "input-radio" })
+                                            </div>
+                                            <div class="payment_box payment_method_cheque" style="display: block;">
+                                                Chuyển tiền đến tài khoản sau:
+                                                <br>- Số tài khoản: 123 456 789
+                                                <br>- Chủ TK: Nguyễn A
+                                                <br>- Ngân hàng ACB, Chi nhánh TPHCM
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="text-center"><button type="submit" class="beta-btn primary">Đặt hàng<i class="fa fa-chevron-right"></i></button></div>
+                        </div> <!-- .your-order -->
+                    </div>
+                </div>
+            }
+            @*</form>*@
+        }
+    </div> <!-- #content -->
+</div> <!-- .container -->
+
+@section script
+{
+    <script>
+        $(document).ready(function () {
+            $("#emailAjax").change(function () {
+                var email = $(this).val();
+                $.get("/Coffee/public/donhang/" + email, function (data) {
+                    if (data) $("#datachange").html(data);
+                });
+            });
+        });
+    </script>
+}

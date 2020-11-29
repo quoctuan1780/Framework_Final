@@ -1,0 +1,133 @@
+﻿
+@{
+    var tongSoHang = CHAdmin.Models.cartModel.TongSoHang;
+    var tongSoTien = CHAdmin.Models.cartModel.TongTien;
+    var loais = new Model.EF.CoffeeHouseDbContext().loaisanphams;
+    string a = "0";
+}
+@*@model List<Model.EF.loaisanpham>*@
+<div id="header">
+    <div class="header-top">
+        <div class="container">
+            <div class="pull-left auto-width-left">
+                <ul class="top-menu menu-beta l-inline">
+                    <li><a href="Javascript:void(0)"><i class="fa fa-home"></i>Quốc Tuấn - Đại học công nghệ thông tin - KP6 - Linh Trung - Thủ Đức - TP HCM</a></li>
+                    <li><a href="Javascript:void(0)"><i class="fa fa-phone"></i> 0163 296 7751</a></li>
+                </ul>
+            </div>
+            <div class="pull-right auto-width-right">
+                <ul class="top-details menu-beta l-inline">
+                    @if (Session["idUser"] != null)
+                    {
+                        <li><a href="/Client/ClientInfo/Index"><i class="fa fa-user" style="font-size: 12pt"> @Session["tenKH"]</i></a></li>
+                        <li><a href="/Client/Login/Logout">Đăng xuất</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="/Client/Register/Index">Đăng kí</a></li>
+                        <li><a href="/Client/Login/Index">Đăng nhập</a></li>
+                    }
+                </ul>
+            </div>
+
+            <div class="clearfix"></div>
+        </div> <!-- .container -->
+    </div> <!-- .header-top -->
+    <div class="header-body">
+        <div class="container beta-relative">
+            <div class="pull-left">
+                <a href="/Client/Home/Index" id="logo"><img src="image/logo/logo-coffee-house.png" width="200px" alt=""></a>
+            </div>
+            <div class="pull-right beta-components space-left ov">
+                <div class="space10">&nbsp;</div>
+                <div class="beta-comp">
+                    <form role="search" method="post" id="searchform" action="/Client/Search/Index">
+                        <input type="text" value="" name="s" id="s" placeholder="Nhập từ khóa..." />
+                        <button class="fa fa-search" type="submit" id="searchsubmit"></button>
+                    </form>
+                </div>
+                <div class="beta-comp">
+                    
+                    
+                        <div class="cart">
+                            <div class="beta-select">
+                                <i class="fa fa-shopping-cart"></i> Giỏ hàng 
+                                @if (Session["giohang"] != null)
+                                { @tongSoHang }
+                                else
+                                { @a } 
+                            <i class="fa fa-chevron-down"></i>
+                            </div>
+                            <div class="beta-dropdown cart-body">
+                                @if (Session["giohang"] != null)
+                                {
+                                    
+                                    foreach (var hang in Session["giohang"] as List<CHAdmin.Models.cartModel>)
+                                    {
+                                    <div class="cart-item">
+                                        @*<a class="cart-item-delete" href="/Client/Cart/XoaSp/@hang.maSP"><i class="fa fa-times"></i></a>*@
+                                        <div class="media">
+                                            <a class="pull-left" href="/Client/Detail/Index/@hang.maSP"><img src="image/product/@hang.Hinh" alt=""></a>
+                                            <div class="media-body">
+                                                <span class="cart-item-title">@hang.tenSP</span>
+                                                <span class="cart-item-amount">
+                                                    @hang.soLuong*<span>
+                                                        @if (@hang.donGiaKM == 0)
+                                                        {@hang.donGiaGoc }
+                                                        else
+                                                        {@hang.donGiaKM} VND
+                                                    </span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    }
+                                }
+                                else
+                                {
+                                    CHAdmin.Models.cartModel.TongSoHang = 0;
+                                    CHAdmin.Models.cartModel.tongTien = 0;
+                                    tongSoTien = 0;
+                                    tongSoHang = 0;
+                                }
+                                <div class="cart-caption">
+                                    <div class="cart-total text-right">Tổng tiền: <span class="cart-total-value">@tongSoTien VND</span></div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="center">
+                                        <div class="space10">&nbsp;</div>
+                                        <a href="/Client/Cart/Index" class="beta-btn primary text-center">Checkout <i class="fa fa-chevron-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- .cart -->
+                   
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div> <!-- .container -->
+    </div> <!-- .header-body -->
+    <div class="header-bottom" style="background-color: black;">
+        <div class="container">
+            <!--<a class="visible-xs beta-menu-toggle pull-right" href="#"><span class='beta-menu-toggle-text'>Menu</span> <i class="fa fa-bars"></i></a>-->
+            <div class="visible-xs clearfix"></div>
+            <nav class="main-menu">
+                <ul class="l-inline ov">
+                    <li><a href="/Client/Home/Index">Trang chủ</a></li>
+                    <li>
+                        <a href="javascrip:void(0)">Loại sản phẩm</a>
+                        <ul class="sub-menu">
+                            @foreach (var loai in loais)
+                            {
+                                <li><a href="/Client/Product/Index/@loai.maloaisp">@loai.tenloaisp</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li><a href="/Client/Introduct/Index">Giới thiệu</a></li>
+                    <li><a href="/Client/Contact/Index">Liên hệ</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </nav>
+        </div> <!-- .container -->
+    </div> <!-- .header-bottom -->
+</div> <!-- #header -->

@@ -1,0 +1,239 @@
+﻿@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Areas/Client/Views/Shared/_LayoutMaster.cshtml";
+    //var spmoi = CHAdmin.Areas.Client.Dao.HomeDao.getSPKM().ToList();
+    var spmoi = new Model.EF.CoffeeHouseDbContext().sanphams.OrderByDescending(x => x.ngaynhap).Take(3).ToList();
+    int maloaisp = (int)ViewData["maloaisp"];
+    var loai = new CHAdmin.Areas.Client.Dao.DetailDao().getTuongTu(maloaisp);
+    List<CHAdmin.Areas.Client.Dao.DetailDao.sanphambanchay> banchay = new CHAdmin.Areas.Client.Dao.DetailDao().getBanChay();
+}
+@model Model.EF.sanpham
+
+<div class="inner-header">
+    <div class="container">
+        <div class="pull-left">
+            <h6 class="inner-title">Sản phẩm @Model.tensp</h6>
+        </div>
+        <div class="pull-right">
+            <div class="beta-breadcrumb font-large">
+                <a href="Client/Product/Index">Trang chủ</a> / <span>Thông tin chi tiết sản phẩm</span>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<div>
+    <div class="container">
+        <div id="content">
+            <div class="row">
+                <div class="col-sm-9">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <img src="~/Assets/Client/image/product/@Model.hinhanh" alt="" height="250px">
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="single-item-body">
+                                <p class="single-item-title"><h3>@Model.tensp</h3></p>
+                                <p class="single-item-price">
+                                    @if (Model.giakm == 0)
+                                    {
+                                        <span class="flash-sale">@Model.gia VND</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="flash-del">@Model.gia VND</span>
+                                        <span class="flash-sale">@Model.giakm VND</span>
+                                    }
+                                </p>
+                            </div>
+
+                            <div class="clearfix"></div>
+                            <div class="space20">&nbsp;</div>
+
+                            <div class="single-item-desc">
+                                <p>@Model.mota</p>
+                            </div>
+                            <div class="space20">&nbsp;</div>
+
+                            <p>Số lượng:</p>
+                            <div class="single-item-options">
+
+                                <div style="display: inline-flex">
+                                    <input type="number" class="form-control text-center" value="1" id="soluong" style="width: 60px; height: 35px">
+                                    <a class="add-to-cart" href="javascript:void(0)" onclick="addMulticart(@Model.masp, document.getElementById('soluong'))">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space40">&nbsp;</div>
+                    <div class="woocommerce-tabs">
+                        <ul class="tabs">
+                            <li><a href="#tab-description">Mô tả</a></li>
+                            <li><a href="#tab-reviews">Reviews (0)</a></li>
+                        </ul>
+
+                        <div class="panel" id="tab-description">
+                            <p>@Model.mota</p>
+                        </div>
+                        <div class="panel" id="tab-reviews">
+                            <p>No Reviews</p>
+                        </div>
+                    </div>
+                    <div class="space50">&nbsp;</div>
+                    <div class="beta-products-list">
+                        <h4>Sản phẩm tương tự</h4>
+
+                        <div class="row">
+                            @foreach (var sp in loai)
+                            {
+                                <div class="col-sm-4">
+                                    <div class="single-item">
+                                        @if (@sp.giakm != 0)
+                                        {
+                                            <div class="ribbon-wrapper"><div class="ribbon sale">Sale</div></div>
+                                        }
+                                        <div class="single-item-header">
+                                            <a href="/Client/Detail/Index/@sp.masp"><img src="~/Assets/Client/image/product/@sp.hinhanh" alt="" height="250px"></a>
+                                        </div>
+                                        <div class="single-item-body">
+                                            <p class="single-item-title">@sp.tensp</p>
+                                            <p class="single-item-price">
+                                                @if (@sp.giakm == 0)
+                                                {
+                                                    <span class="flash-sale">@sp.gia VND</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="flash-del">@sp.gia VND</span>
+                                                    <span class="flash-sale">@sp.giakm VND</span>
+                                                }
+                                            </p>
+                                        </div>
+                                        <div class="single-item-caption">
+                                            <a class="add-to-cart pull-left" href="javascript:void(0)" onclick="addCart(@sp.masp)"><i class="fa fa-shopping-cart"></i></a>
+                                            <a class="beta-btn primary" href="/Client/Detail/Index/@sp.masp">Chi tiết<i class="fa fa-chevron-right"></i></a>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <!--<div class="row">{{$sp_tuongtu->links()}}</div>-->
+                    </div> <!-- .beta-products-list -->
+                </div>
+                <div class="col-sm-3 aside">
+                    <div class="widget">
+                        <h3 class="widget-title">Bán chạy nhất</h3>
+                        <div class="widget-body">
+                            <div class="beta-sales beta-lists">
+                                @foreach (var sp in banchay)
+                                    {
+
+                                        <div class="media beta-sales-item">
+                                            <a class="pull-left" href="/Client/Detail/Index/@sp.sp.masp"><img src="image/product/@sp.sp.hinhanh" alt=""></a>
+                                            <div class="media-body">
+                                                @sp.sp.tensp<br>
+                                                @if (@sp.sp.giakm == 0)
+                                                {
+                                                <span class="beta-sales-price">@sp.sp.gia VND</span>
+                                                }
+                                                else
+                                                {
+                                                <span class="beta-sales-price">@sp.sp.giakm VND</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                            </div>
+                        </div>
+                    </div> <!-- best sellers widget -->
+                    <div class="widget">
+                        <h3 class="widget-title">Sản phẩm mới</h3>
+                        <div class="widget-body">
+                            <div class="beta-sales beta-lists">
+                                <div class="paginateRow">
+                                    @foreach (var sp in spmoi)
+                                    {  
+                                        <div class="media beta-sales-item">
+                                            <a class="pull-left" href="/Client/Detail/Index/@sp.masp"><img src="~/Assets/Client/image/product/@sp.hinhanh" alt=""></a>
+                                            <div class="media-body">
+                                                @sp.tensp<br>
+                                                @if (sp.giakm == 0)
+                                                {
+                                                    <span class="beta-sales-price">@sp.gia VND</span>
+                                                }
+                                                else
+                                                {
+                                                <span class="beta-sales-price">@sp.giakm VND</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <br>
+                                    }
+                                    <!--<div class="paginate">{{$sp_moi->links()}}</div>-->
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                </div> <!-- best sellers widget -->
+            </div>
+        </div>
+    </div> <!-- #content -->
+</div> <!-- .container -->
+
+@section script
+{
+    <script type="text/javascript">
+		$(document).ready(function(){
+		$('.paginate ul.pagination').hide();
+			$(function() {
+				$('.paginateRow').jscroll({
+					autoTrigger: true,
+					loadingHtml: '<img class="center-block" src="/images/loading.gif" alt="Loading..." />',
+					padding: 0,
+					nextSelector: '.pagination li.active + li a',
+					contentSelector: 'div.paginateRow',
+					callback: function() {
+
+						$('.paginate ul.pagination').remove();
+					}
+				});
+			});
+		});
+		function addMulticart(id, sl){
+			var soluong = sl.value;
+			if(soluong <= 0)
+			swal({
+				  title: "Cảnh báo",
+				  text: "Số lượng bạn nhập đang nhỏ hơn hoặc bằng 0",
+				  icon: "error",
+				  button: "Tôi đã hiểu!",
+				});
+			else
+			$.ajax({
+                url: "/Client/Cart/ThemNSP/"+id+"/"+soluong,
+				method: "GET",
+				data:{id:id, sl:soluong},
+				success:function(data){
+					if(data == 'ok'){
+						swal({
+							  title: "Thông báo",
+							  text: "Thêm sản phẩm vào giỏ hàng thành công",
+							  icon: "success",
+							  button: "Ok",
+						});
+					}
+				}
+			});
+		}
+    </script>
+}
+
+
