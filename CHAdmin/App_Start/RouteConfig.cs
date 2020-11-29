@@ -170,22 +170,25 @@ namespace CHAdmin
 
             routes.MapRoute(
                 name: "Default",
-                url: "Client/{controller}/{action}/{id}",
-                defaults: new {controller = "Home", action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{action}/{id}",
+                defaults: new {controller = "Account", action = "Login", id = UrlParameter.Optional }
             );
 
             routes.MapRoute(
                name: "xoaspgiohang",
                "Client/{controller}/{action}",
                new { controller = "Cart", action = "XoaSP" });
+
             routes.MapRoute(
                 name: "thaydoisoluong",
                 "Client/{controller}/{action}/{id}/{soluong}",
                 new { controller = "Cart", action = "SuaSL", id = "", soluong = "" });
+
             routes.MapRoute(
                 name: "dangnhapclient",
                 "Client/{controller}/{action}",
                 new { controller = "Login", action = "Index" });
+
             routes.MapRoute(
                 name: "dathang",
                 "Client/{controller}/{action}",
@@ -195,30 +198,37 @@ namespace CHAdmin
                 "Client/{controller}/{action}",
                 new { controller = "ClientInfo", action = "Index" },
                 new { httpMethod = new HttpMethodConstraint("POST") });
+
             routes.MapRoute(
                 name: "dangxuatclient",
                 url: "{area}/{controller}/{action}",
                 new { area = "Client", controller = "Login", action = "Logout" });
+
             routes.MapRoute(
                 name: "loaisanpham",
                 "Client/{controller}/{action}/{id}",
                 new { controller = "Product", action = "Index", id = "" });
+
             routes.MapRoute(
                 name: "chitietsp",
                 "Client/{controller}/{action}/{id}",
                 new { controller = "Detail", action = "Index", id = "" });
+
             routes.MapRoute(
                 name: "them1sp",
                 "Client/{controller}/{action}/{id}",
                 new { controller = "Cart", action = "Them1SP", id = "" });
+
             routes.MapRoute(
                 name: "themnhieusp",
                 "Client/{controller}/{action}/{id}/{sl}",
                 new { controller = "Cart", action = "ThemNSP", id = "", sl = "" });
+
             routes.MapRoute(
                 name: "trangchusp",
                 "Client/{controller}/{action}",
                 defaults: new { controller = "Home", action = "Index" });
+
             routes.MapRoute(
                 name: "dangki",
                 "Client/{controller}/{action}",
